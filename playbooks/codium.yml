@@ -1,0 +1,7 @@
+- name: "Установка 'codium'"
+  hosts: masters
+  become: True
+  tasks:
+    - name: 'Установка пакета'
+      package: name=codium
+
