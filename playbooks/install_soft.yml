@@ -2,6 +2,7 @@
 - name: "Install soft from variable"
   hosts: all
   become: True
+  gather_facts: no
 
   tasks:
   - name: "Install packages"

@@ -1,0 +1,12 @@
+---
+- name: 'Получение информации о службах'
+  hosts: slaves
+  gather_facts: True
+  tasks:
+    - name: "Получение информации о службах"
+      ansible.builtin.service_facts:
+
+    - debug: var=ansible_facts['services']["{{ item }}"]
+      loop: "{{ services_list }}"
+
+

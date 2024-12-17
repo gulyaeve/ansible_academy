@@ -1,0 +1,26 @@
+---
+- name: 'Ansible facts'
+  hosts: all
+  gather_facts: True
+  tasks:
+    - name: "Напечатать информация об ОС"
+      debug:
+        msg: 
+          # HOSTNAME {{ ansible_facts.hostname }}""
+          os_hostname:
+            "{{ ansible_facts.hostname }}"
+          os_family:
+            "{{ ansible_facts['distribution'] }}"
+          kernel:
+            "{{ ansible_facts.kernel }}"
+          unix_time:
+            "{{ ansible_facts.date_time.epoch }}"
+    # - debug: var=ansible_facts['date_time']['epoch']
+    # - debug: var=ansible_facts['devices']
+
+    - name: "Получение информации о службах"
+      ansible.builtin.service_facts:
+
+    - debug: var=ansible_facts['services']['sshd.service']
+      
+

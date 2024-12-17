@@ -1,0 +1,15 @@
+- name: "Create users"
+  hosts: slaves
+  become: True
+  gather_facts: no
+  # vars_files:
+  #   - ../vault
+
+  tasks:
+  - name: 'Delete users from list'
+    user:
+      name: "{{ item }}"
+      state: absent
+      remove: yes
+    loop: "{{ users }}"
+

@@ -3,3 +3,9 @@ users:
   - "petr"
   - "maria"
   - "superadmin"
+
+services_list:
+  - "sshd.service"
+  - "NetworkManager.service"
+  - "postgresql.service"
+  - "httpd.service"
