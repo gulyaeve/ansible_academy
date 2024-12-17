@@ -5,3 +5,6 @@
     - name: 'Установка пакета'
       package: name=cowsay
 
+    - name: 'Проверка'
+      shell: 'cowsay hello'
+
