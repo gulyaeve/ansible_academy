@@ -1,0 +1,12 @@
+- name: "users"
+  hosts: slaves
+  become: True
+  tasks:
+  - name: 'vasily'
+    user:
+      name: 'vasily'
+      create_home: yes
+      password: "{{ 'Start123' | password_hash('sha512', 'mysecretsalt') }}"
+      append: yes
+      groups: users, wheel
+

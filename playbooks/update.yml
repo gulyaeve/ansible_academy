@@ -1,0 +1,9 @@
+- name: "Установка обновлений"
+  hosts: slaves
+  become: True
+  tasks:
+  - name: 'Установка обновлений'
+    yum:
+      name: '*'
+      state: latest
+
