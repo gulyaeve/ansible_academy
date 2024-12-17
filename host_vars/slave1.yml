@@ -1,0 +1,5 @@
+packages:
+  - "neovim"
+  - "gimp"
+  - "htop"
+  - "zeit"

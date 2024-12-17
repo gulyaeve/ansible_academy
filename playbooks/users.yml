@@ -1,12 +1,16 @@
-- name: "users"
+- name: "Create users"
   hosts: slaves
   become: True
+  vars_files:
+    - ../vault
+
   tasks:
-  - name: 'vasily'
+  - name: 'Create users from list'
     user:
-      name: 'vasily'
+      name: "{{ item }}"
       create_home: yes
-      password: "{{ 'Start123' | password_hash('sha512', 'mysecretsalt') }}"
+      password: "{{ user_pass | password_hash('sha512') }}"
       append: yes
       groups: users, wheel
+    loop: "{{ users }}"
 

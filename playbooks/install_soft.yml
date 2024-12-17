@@ -1,0 +1,17 @@
+---
+- name: "Install soft from variable"
+  hosts: all
+  become: True
+
+  tasks:
+  - name: "Install packages"
+    ansible.builtin.dnf:
+      name: "{{ packages }}"
+      state: latest
+
+  - debug: var=packages
+
+  - name: "Показать значение переменной"
+    debug:
+      msg: "List of packages: {{ packages }}"
+      
