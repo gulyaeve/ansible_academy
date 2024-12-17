@@ -1,0 +1,54 @@
+# 1) Установить пакет
+# 2) Передать файлы на хост
+# 3) Внести изменения в конфиг
+# 4) Запустить службу
+
+---
+- name: "Deploy apache"
+  hosts: slaves
+  become: yes
+  # vars:
+  #   web_port: 8080
+  vars_prompt:
+    - name: web_port
+      prompt: "Укажите порт для службы"
+      default: 8080
+      private: no
+
+  tasks:
+    - name: "Установка пакет apache2"
+      dnf:
+        name: "httpd"
+        state: latest
+        update_cache: yes
+
+    - name: "Сменить порт по умолчанию"
+      ansible.builtin.lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^Listen '
+        insertafter: '^#Listen '
+        line: "Listen {{ web_port }}"
+      register: config_modify
+    
+    - name: "Передача шаблона index.html"
+      template:
+        src: "index.html.j2"
+        dest: "/var/www/html/index.html"
+
+    - name: "Перезапуск службы httpd"
+      service:
+        name: "httpd"
+        state: restarted
+        enabled: yes
+      when:
+        config_modify.changed
+
+    - name: "Проверка страницы"
+      uri:
+        url: "http://{{ ansible_host }}:{{ web_port }}"
+        return_content: yes
+      register: page
+
+    - name: "Вывод содержимого страницы"
+      debug:
+        var: page.content, page.status, page.url
