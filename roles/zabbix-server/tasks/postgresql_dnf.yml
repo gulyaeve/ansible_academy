@@ -1,0 +1,4 @@
+- name: "Install packages for postgresql"
+  ansible.builtin.dnf:
+    name: "{{ db_packages }}"
+    state: latest

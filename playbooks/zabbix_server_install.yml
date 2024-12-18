@@ -1,0 +1,9 @@
+---
+- name: "Install zabbix server"
+  hosts: localhost
+  become: True
+  roles:
+    - roles/zabbix-server
+
+  # vars:
+  #   tz_info: "Asia/Yekaterinburg"

@@ -1,0 +1,20 @@
+- name: Create a new database with name "zabbix"
+  become_user: postgres
+  community.postgresql.postgresql_db:
+    name: zabbix
+    # comment: My test DB
+
+- name: Connect to zabbix database, create zabbix user, and grant all access
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    db: zabbix
+    name: zabbix
+    password: zabbixpassword
+    priv: "ALL"
+    # expires: "Jan 31 2020"
+
+- name: "Change owner zabbix"
+  become_user: postgres
+  community.postgresql.postgresql_owner:
+    db: zabbix
+    new_owner: zabbix

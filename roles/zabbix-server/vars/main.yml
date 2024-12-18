@@ -1,0 +1,16 @@
+---
+# vars file for roles/zabbix-server
+zabbix_packages:
+  - "python3-psycopg2"
+  - "httpd" 
+  - "zabbix-apache-conf" 
+  - "zabbix-sql-scripts"
+
+zabbix_packages_server:
+  - zabbix-server-pgsql 
+  - zabbix-web-pgsql 
+  - zabbix-agent
+
+db_packages:
+  - postgresql13 
+  - postgresql13-server

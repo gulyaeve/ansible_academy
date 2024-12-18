@@ -12,15 +12,36 @@
           os_family:
             "{{ ansible_facts['os_family'] }}"
           kernel:
-            "{{ ansible_facts.kernel }}"
+            "{{ ansible_facts.host | default('No host') }}"
           unix_time:
             "{{ ansible_facts.date_time.epoch }}"
+          test:
+            "{{ ansible_facts['mounts'][0]['options'] | split(',') | join(' ') }}"
+          test2:
+            "{{ ansible_facts['mounts'][0]['options'] }}"
+
+    - debug: var=ansible_facts['mounts'][0]['options']
+
+    - name: Run program
+      command: "/bin/echo 123"
+      register: result
+      ignore_errors: true
+
+    - debug: var=result
+
+    - debug:
+        msg: "stop"
+      failed_when: result|failed
+
+
+      
+      
     # - debug: var=ansible_facts['date_time']['epoch']
     # - debug: var=ansible_facts['devices']
 
-    - name: "Получение информации о службах"
-      ansible.builtin.service_facts:
+    # - name: "Получение информации о службах"
+    #   ansible.builtin.service_facts:
 
-    - debug: var=ansible_facts['services']['sshd.service']
+    # - debug: var=ansible_facts['services']['sshd.service']
       
 

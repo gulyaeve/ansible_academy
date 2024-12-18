@@ -1,0 +1,4 @@
+- name: "Install packages for zabbix"
+  ansible.builtin.dnf:
+    name: "{{ zabbix_packages }}"
+    state: latest

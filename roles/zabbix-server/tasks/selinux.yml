@@ -1,0 +1,11 @@
+- name: "Включить httpd_can_network_connect"
+  ansible.posix.seboolean:
+    name: httpd_can_network_connect
+    state: true
+    persistent: true
+
+- name: "Включить httpd_can_network_connect_db"
+  ansible.posix.seboolean:
+    name: httpd_can_network_connect_db
+    state: true
+    persistent: true

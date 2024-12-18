@@ -1,0 +1,3 @@
+---
+# defaults file for roles/zabbix-server
+tz_info: "Europe/Moscow"

@@ -1,5 +1,12 @@
 ---
-- hosts: slaves
+- name: "Test role"
+  hosts: slaves
+  become: True
+  roles:
+    - roles/apache
+
+- name: "Test role 2"
+  hosts: master1
   become: True
   roles:
     - roles/apache

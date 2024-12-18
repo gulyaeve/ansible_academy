@@ -1,0 +1,38 @@
+---
+# tasks file for roles/zabbix-server
+- name: "Настройка SeLinux"
+  import_tasks: selinux.yml
+
+- name: "Установка пакетов для zabbix"
+  ansible.builtin.dnf: name={{ zabbix_packages }} state=latest
+  # import_tasks: zabbix_dnf.yml
+
+- name: "Автозапуск службы httpd"
+  service:
+    name: "httpd"
+    # state: restarted
+    enabled: yes
+
+- name: "Установка пакетов для postgresql"
+  ansible.builtin.dnf: name={{ db_packages }} state=latest
+  # import_tasks: postgresql_dnf.yml
+
+- name: "Автозапуск базы данных"
+  service:
+    name: "postgresql-13"
+    # state: restarted
+    enabled: yes
+
+- name: "Настройка postgresql"
+  import_tasks: db_setup.yml
+
+- name: "Установка пакетов Zabbix server"
+  ansible.builtin.dnf: name={{ zabbix_packages_server }} state=latest
+
+- name: "Копирование шаблона php"
+  ansible.builtin.template:
+    src: php.ini.j2
+    dest: "/etc/php.ini"
+
+- name: "Настройка zabbix postgresql"
+  import_tasks: postgres_setup.yml
