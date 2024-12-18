@@ -1,0 +1,19 @@
+---
+- name: "apache пример с повторным использованием плейбуков"
+  hosts: slaves
+  become: yes
+  # vars:
+  #   web_port: 8080
+  vars_prompt:
+    - name: web_port
+      prompt: "Укажите порт для службы"
+      default: 8080
+      private: no
+
+  handlers:
+    - import_tasks: apache/handlers.yml
+
+  tasks:
+    - import_tasks: apache/packages.yml
+    - import_tasks: apache/settings.yml
+    - import_tasks: apache/tests.yml

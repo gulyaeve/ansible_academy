@@ -15,6 +15,13 @@
       default: 8080
       private: no
 
+  handlers:
+    - name: "Перезапуск службы httpd"
+      service:
+        name: "httpd"
+        state: restarted
+        enabled: yes
+
   tasks:
     - name: "Установка пакет apache2"
       dnf:
@@ -28,20 +35,16 @@
         regexp: '^Listen '
         insertafter: '^#Listen '
         line: "Listen {{ web_port }}"
-      register: config_modify
+      notify: "Перезапуск службы httpd"
     
     - name: "Передача шаблона index.html"
       template:
         src: "index.html.j2"
         dest: "/var/www/html/index.html"
+      notify: "Перезапуск службы httpd"
 
-    - name: "Перезапуск службы httpd"
-      service:
-        name: "httpd"
-        state: restarted
-        enabled: yes
-      when:
-        config_modify.changed
+    - name: "Запуск обработчиков (handlers)"
+      meta: flush_handlers
 
     - name: "Проверка страницы"
       uri:

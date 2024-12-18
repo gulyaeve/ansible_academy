@@ -1,0 +1,5 @@
+- name: "Установка пакет httpd"
+  dnf:
+    name: "httpd"
+    state: latest
+    update_cache: yes
