@@ -1,0 +1,9 @@
+- name: "Проверка страницы"
+  uri:
+    url: "http://{{ ansible_host }}:{{ web_port }}"
+    return_content: yes
+  register: page
+
+- name: "Вывод содержимого страницы"
+  debug:
+    var: page.content, page.status, page.url

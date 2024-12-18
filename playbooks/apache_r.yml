@@ -1,0 +1,7 @@
+---
+- hosts: slaves
+  become: True
+  roles:
+    - roles/apache
+  # vars:
+  #   web_port: 80

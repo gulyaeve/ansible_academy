@@ -1,0 +1,7 @@
+---
+# handlers file for roles/apache
+- name: "Перезапуск службы httpd"
+  service:
+    name: "httpd"
+    state: restarted
+    enabled: yes

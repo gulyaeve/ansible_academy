@@ -10,7 +10,7 @@
           os_hostname:
             "{{ ansible_facts.hostname }}"
           os_family:
-            "{{ ansible_facts['distribution'] }}"
+            "{{ ansible_facts['os_family'] }}"
           kernel:
             "{{ ansible_facts.kernel }}"
           unix_time:

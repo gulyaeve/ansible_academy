@@ -1,0 +1,27 @@
+---
+# tasks file for roles/apache
+- name: "Установка пакет apache2"
+  dnf:
+    name: "httpd"
+    state: latest
+    update_cache: yes
+
+- name: "Сменить порт по умолчанию"
+  ansible.builtin.lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^Listen '
+    insertafter: '^#Listen '
+    line: "Listen {{ web_port }}"
+  notify: "Перезапуск службы httpd"
+
+- name: "Передача шаблона index.html"
+  template:
+    src: "index.html.j2"
+    dest: "/var/www/html/index.html"
+  notify: "Перезапуск службы httpd"
+
+- name: "Запуск обработчиков (handlers)"
+  meta: flush_handlers
+
+- name: "Проверка страницы"
+  import_tasks: test.yml
