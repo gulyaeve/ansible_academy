@@ -114,6 +114,7 @@ def run_module():
 
     out = module.run_command('/usr/bin/echo "hello"')
     result['test_echo'] = out[1]
+    result['test'] = 123
 
     module.exit_json(**result)
 
