@@ -98,6 +98,9 @@ def run_module():
     users = []
     users_for_new_shell = []
 
+    new_shell = module.params['new_shell']
+    old_shell = module.params['old_shell']
+
     with open('/etc/passwd') as passwd:
         for user in passwd.readlines():
             if not module.params['homedirs']:
@@ -107,13 +110,13 @@ def run_module():
                 home_path = user.split(':')[5]
                 if home_path.startswith('/home'):
                     users.append(user.split(':')[0])
-            if module.params['old_shell']:
-                if user.split(':')[6].strip().endswith(module.params['old_shell']):
+            if old_shell:
+                if user.split(':')[6].strip().endswith(old_shell):
                     users_for_new_shell.append(user.split(':')[0])
 
-    new_shell = module.params['new_shell']
+    
 
-    if module.params['old_shell'] and new_shell:
+    if old_shell and new_shell:
         if os.path.isfile(new_shell) and os.access(new_shell, os.X_OK):
             for user in users_for_new_shell:
                 answer = module.run_command(f"chsh -s {new_shell} {user}")

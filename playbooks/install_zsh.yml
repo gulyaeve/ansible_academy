@@ -10,5 +10,5 @@
   - name: "Test my users module"
     users_list:
       new_shell: "/bin/bash"
-      old_shell: "/bin/zsh"
+      # old_shell: "/bin/zsh"
     
