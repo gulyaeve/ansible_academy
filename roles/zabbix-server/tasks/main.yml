@@ -17,11 +17,11 @@
   ansible.builtin.dnf: name={{ db_packages }} state=latest
   # import_tasks: postgresql_dnf.yml
 
-- name: "Автозапуск базы данных"
-  service:
-    name: "postgresql-13"
-    # state: restarted
-    enabled: yes
+# - name: "Автозапуск базы данных"
+#   service:
+#     name: "postgresql-13"
+#     # state: restarted
+#     enabled: yes
 
 - name: "Настройка postgresql"
   import_tasks: db_setup.yml
@@ -36,3 +36,18 @@
 
 - name: "Настройка zabbix postgresql"
   import_tasks: postgres_setup.yml
+
+- name: "Шаблон zabbix_server.conf"
+  template:
+    src: zabbix_server.conf.j2
+    dest: /etc/zabbix/zabbix_server.conf
+
+- name: "Перезапуск zabbix"
+  service:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  loop:
+    - zabbix-server
+    - zabbix-agent
+    - httpd

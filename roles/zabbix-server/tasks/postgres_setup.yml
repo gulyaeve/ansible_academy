@@ -1,20 +1,31 @@
 - name: Create a new database with name "zabbix"
   become_user: postgres
   community.postgresql.postgresql_db:
-    name: zabbix
-    # comment: My test DB
+    name: "{{ zabbix_db_name }}"
 
 - name: Connect to zabbix database, create zabbix user, and grant all access
   become_user: postgres
   community.postgresql.postgresql_user:
-    db: zabbix
-    name: zabbix
-    password: zabbixpassword
-    priv: "ALL"
-    # expires: "Jan 31 2020"
+    db: "{{ zabbix_db_name }}"
+    user: "{{ zabbix_db_user }}"
+    password: "{{ zabbix_db_pass }}"
+    role_attr_flags: "CREATEDB,SUPERUSER"
 
-- name: "Change owner zabbix"
-  become_user: postgres
-  community.postgresql.postgresql_owner:
-    db: zabbix
-    new_owner: zabbix
+- name: "Шаблон postgresql.conf"
+  template:
+    src: postgresql.conf.j2
+    dest: /var/lib/pgsql/13/data/postgresql.conf
+
+- name: "Копирование файлы pg_hba.conf"
+  copy:
+    src: pg_hba.conf
+    dest: /var/lib/pgsql/13/data/pg_hba.conf
+
+- name: "Перезапуск postgresql"
+  service:
+    name: "postgresql-13"
+    state: restarted
+    enabled: yes
+
+- name: "sql дамп в базу данных"
+  shell: "zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql zabbix"

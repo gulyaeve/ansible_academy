@@ -1,3 +1,7 @@
 ---
 # defaults file for roles/zabbix-server
 tz_info: "Europe/Moscow"
+
+zabbix_db_user: "zabbix"
+zabbix_db_pass: "zabbixpassword"
+zabbix_db_name: "zabbix"
