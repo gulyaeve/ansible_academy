@@ -122,10 +122,6 @@ def run_module():
                 else:
                     result['changed'] = True
 
-    # else:
-        # module.fail_json(msg='old_shell and new_shell необходимо указывать одновременно', **result)
-
-
     result['users'] = users
     result['users_for_new_shell'] = users_for_new_shell
 
