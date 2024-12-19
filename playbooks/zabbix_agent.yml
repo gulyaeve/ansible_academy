@@ -1,0 +1,58 @@
+---
+- name: "Настройка агента zabbix на управляемых хостах"
+  become: yes
+  hosts: slaves
+  vars:
+    zabbix_agent_port: 10050
+
+  tasks:
+    - name: "Установка zabbix agent"
+      dnf:
+        name: "zabbix-agent"
+        state: latest
+
+    - name: "Копирование шаблона zabbix_agent.conf"
+      template:
+        src: zabbix_agent.conf.j2
+        dest: /etc/zabbix/zabbix_agentd.d/zabbix_agent.conf
+
+    - name: "Перезапуск агента"
+      service:
+        name: zabbix-agent
+        state: restarted
+        enabled: yes
+
+    - name: Set credentials to access Zabbix Server API
+      ansible.builtin.set_fact:
+        ansible_user: Admin
+        ansible_httpapi_pass: zabbix
+    
+    - name: Create a new host or rewrite  an existing host's info
+      vars:
+        ansible_network_os: community.zabbix.zabbix
+        ansible_connection: httpapi
+        ansible_httpapi_port: 8080
+        ansible_host: "{{ hostvars['master1']['ansible_host'] }}"
+        # ansible_httpapi_use_ssl: true
+        # ansible_httpapi_validate_certs: false
+        ansible_zabbix_url_path: "zabbix"  # If Zabbix WebUI runs on non-default (zabbix) path ,e.g. http://<FQDN>/zabbixeu
+      become: false
+      # delegate_to: zabbix-example-fqdn.org# you can use delegate_to or task level ansible_host like next example
+      community.zabbix.zabbix_host:
+        host_name: "{{ ansible_facts['hostname'] }}"
+        visible_name: "{{ ansible_facts['hostname'] }}"
+        description: "My {{ ansible_facts['hostname'] }} Description"
+        host_groups:
+          - Linux servers
+        link_templates:
+          - Linux by Zabbix agent
+        status: enabled
+        state: present
+        interfaces:
+          - type: 1
+            main: 1
+            useip: 1
+            ip: "{{ hostvars[inventory_hostname].ansible_host }}"
+            dns: ""
+            port: "{{ zabbix_agent_port }}"
+
