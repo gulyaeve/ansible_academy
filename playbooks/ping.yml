@@ -3,3 +3,9 @@
   tasks:
   - name: ping
     ping:
+
+  - name: "Test script"
+    my_module:
+      path: "/tmp"
+      count: 30
+    
