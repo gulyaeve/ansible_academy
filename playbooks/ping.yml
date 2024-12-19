@@ -4,7 +4,7 @@
   - name: ping
     ping:
 
-  - name: "Test script"
+  - name: "Test my module"
     my_module:
       path: "/tmp"
       count: 30

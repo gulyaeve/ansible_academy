@@ -82,7 +82,8 @@ def run_module():
 
     result = dict(
         changed=False,
-        files=''
+        files='',
+        test_echo=''
     )
 
     module = AnsibleModule(
@@ -110,6 +111,9 @@ def run_module():
 
     if len(files) > 0:
         result['changed'] = True
+
+    out = module.run_command('/usr/bin/echo "hello"')
+    result['test_echo'] = out[1]
 
     module.exit_json(**result)
 
