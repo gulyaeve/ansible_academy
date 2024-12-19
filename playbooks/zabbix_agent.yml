@@ -4,6 +4,7 @@
   hosts: slaves
   vars:
     zabbix_agent_port: 10050
+    httpd_port: 8080
 
   tasks:
     - name: "Установка zabbix agent"
@@ -31,7 +32,7 @@
       vars:
         ansible_network_os: community.zabbix.zabbix
         ansible_connection: httpapi
-        ansible_httpapi_port: 8080
+        ansible_httpapi_port: "{{ httpd_port }}"
         ansible_host: "{{ hostvars['master1']['ansible_host'] }}"
         # ansible_httpapi_use_ssl: true
         # ansible_httpapi_validate_certs: false
