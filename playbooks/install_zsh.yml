@@ -6,9 +6,19 @@
     dnf:
       name: zsh
       state: latest
+    async: 300
+    poll: 0
+    register: dnf_zsh
 
   - name: "Test my users module"
     users_list:
-      new_shell: "/bin/bash"
+      new_shell: "/bin/zsh"
       # old_shell: "/bin/zsh"
+
+  - name: "Test async"
+    ansible.builtin.async_status:
+      jid: "{{ dnf_zsh.ansible_job_id }}"
+    register: result
+    until: result.finished
+    retries: 300
     
